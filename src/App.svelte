@@ -1,10 +1,31 @@
 <script>
-	export let name;
+	let name = "svelte";
+	let number = 42;
+	let html = "<b>This is my text</b>";
+	let inputValue;
+	function changeNameHandler() {
+		name = "new name";
+	}
+	function submitHandler() {
+		console.log("лог", inputValue);
+	}
 </script>
 
 <main>
-	<h1>Привет {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>Главная страница</h1>
+	<button on:click={changeNameHandler}>Кнопка</button>
+	<h2>{name.toUpperCase()}</h2>
+	<h2>{(Math.random() * number).toFixed(2)}</h2>
+	<p>{@html html}</p>
+
+	<form on:submit|preventDefault={submitHandler}>
+		<input
+			type="text"
+			on:input={(event) => (inputValue = event.target.value)}
+		/>
+		<button type="submit"> Отправить </button>
+	</form>
+
 </main>
 
 <style>
@@ -27,4 +48,5 @@
 			max-width: none;
 		}
 	}
+
 </style>
