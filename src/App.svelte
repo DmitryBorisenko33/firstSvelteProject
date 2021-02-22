@@ -1,52 +1,57 @@
 <script>
-	let name = "svelte";
-	let number = 42;
-	let html = "<b>This is my text</b>";
-	let inputValue;
-	function changeNameHandler() {
-		name = "new name";
-	}
-	function submitHandler() {
-		console.log("лог", inputValue);
-	}
+	import { Route, router, active } from "tinro";
 </script>
 
-<main>
-	<h1>Главная страница</h1>
-	<button on:click={changeNameHandler}>Кнопка</button>
-	<h2>{name.toUpperCase()}</h2>
-	<h2>{(Math.random() * number).toFixed(2)}</h2>
-	<p>{@html html}</p>
+<nav>
+	<div class="sidenav">
+		<button on:click={() => router.goto("/")}>Главные настройки</button>
+		<button on:click={() => router.goto("/wifi")}>Настройки WiFi</button>
+	</div>
+</nav>
 
-	<form on:submit|preventDefault={submitHandler}>
-		<input
-			type="text"
-			on:input={(event) => (inputValue = event.target.value)}
-		/>
-		<button type="submit"> Отправить </button>
-	</form>
+<div class="head">
+	<Route path="/">
+		<h1>Главные настройки</h1>
+	</Route>
 
-</main>
+	<Route path="/wifi">
+		<h1>Настройки wifi</h1>
+	</Route>
+</div>
 
 <style>
-	main {
+	.sidenav {
+		height: 100%; /* Full-height: remove this if you want "auto" height */
+		width: 200px; /* Set the width of the sidebar */
+		position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+		z-index: 1; /* Stay on top */
+		top: 0; /* Stay at the top */
+		left: 0;
+		background-color: rgba(17, 17, 17, 0.658); /* Black */
+		overflow-x: hidden; /* Disable horizontal scroll */
+		padding-top: 20px;
+	}
+
+	/* The navigation menu links */
+	.sidenav button {
+		/*text-align: center;*/
+		margin: 10px auto 10px;
+		width: 180px;
+		padding: 6px 8px 6px 16px;
+		text-decoration: none;
+		font-size: 15px;
+		color: #000000;
+		display: block;
+	}
+
+	.head h1 {
 		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+		color: #000000;
+		display: block;
 	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+	.head {
+		margin-left: 200px; /* Same as the width of the sidebar */
+		padding: 0px 10px;
 	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-
 </style>
