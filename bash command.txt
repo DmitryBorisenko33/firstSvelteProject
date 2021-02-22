@@ -1,4 +1,5 @@
 npx degit sveltejs/template ./
 npm i -D tinro
 npm install
-npm run dev 
+npm run dev
+npm run build
