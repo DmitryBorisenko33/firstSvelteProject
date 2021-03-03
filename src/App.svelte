@@ -7,7 +7,6 @@
 	function submitHandler() {
 		console.log("лог", inputValue);
 	}
-	import "https://kit.fontawesome.com/ваш код.js"
 </script>
 
 <div class="hamburger-menu">
