@@ -3,9 +3,22 @@
 	let setMain = "Устройство";
 	let setWifi = "WiFi";
 	let setMqtt = "MQTT";
+	let result = null;
 	let inputValue;
 	function submitHandler() {
 		console.log("лог", inputValue);
+	}
+
+	async function doGetRequest() {
+		const res = await fetch("http://192.168.1.67/check", {
+			mode: "no-cors",
+			method: "GET",
+		});
+		if (res.ok) {
+			alert(res);
+		} else {
+			alert("Ошибка HTTP: " + res.status);
+		}
 	}
 </script>
 
@@ -24,6 +37,13 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
+				<button type="button" on:click={doGetRequest}
+					>Get request</button
+				>
+				<p>Result:</p>
+				<pre>
+				{result}
+				</pre>
 			</div>
 		</Route>
 
@@ -31,15 +51,49 @@
 			<div class="head">
 				<h2>{setWifi}</h2>
 			</div>
+
 			<div class="content">
-				<h4>Название сети</h4>
-				<form on:submit|preventDefault={submitHandler}>
-					<input
-						type="text"
-						on:input={(event) => (inputValue = event.target.value)}
-					/>
-					<button type="submit"> Сохранить </button>
-				</form>
+				<div class="box">
+					<slot>
+						<form>
+							<div class="row">
+								<div class="left-column">
+									<label for="fname">Название сети:</label>
+								</div>
+								<div class="right-column">
+									<input
+										type="text"
+										id="fname"
+										name="fname"
+									/>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="left-column">
+									<label for="lname">Пароль:</label>
+								</div>
+								<div class="right-column">
+									<input
+										type="password"
+										id="lname"
+										name="lname"
+									/>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="center-column">
+									<button
+										type="button"
+										on:click={submitHandler}
+										>Сохранить
+									</button>
+								</div>
+							</div>
+						</form>
+					</slot>
+				</div>
 			</div>
 		</Route>
 
@@ -143,9 +197,45 @@
 	}
 
 	.content {
-		text-align: center;
 		color: #000000;
 		display: block;
-		margin: 50px auto 50px;
+	}
+
+	.box {
+		margin: 10px auto 10px;
+		width: 50%;
+		height: 100%;
+		border: 1px solid #aaa;
+		border-radius: 2px;
+		box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
+		padding: 1em;
+	}
+
+	.row {
+		margin: 10px 0;
+	}
+
+	.left-column {
+		display: inline-block;
+		width: 45%;
+		margin-left: 20px;
+	}
+
+	.right-column {
+		display: inline-block;
+	}
+
+	.center-column {
+		display: block;
+		text-align: center;
+	}
+
+	input {
+		max-width: 100%;
+		width: auto;
+	}
+
+	label {
+		display: flex;
 	}
 </style>
