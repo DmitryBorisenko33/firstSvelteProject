@@ -17,7 +17,7 @@
 		} else if (st == "0") {
 			st = "1";
 		}
-		
+
 		let res = await fetch("http://192.168.88.16/set?order=btn640_" + st, {
 			mode: "no-cors",
 			method: "GET",
@@ -26,7 +26,7 @@
 		if (res.ok) {
 			return res.text();
 		} else {
-			return res.status();
+			return res.status;
 		}
 	}
 
