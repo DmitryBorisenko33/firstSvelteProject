@@ -1,25 +1,33 @@
 <script>
 	import { Route, router, active } from "tinro";
+	import { toast } from "@zerodevx/svelte-toast";
 	let setMain = "Устройство";
 	let setWifi = "WiFi";
 	let setMqtt = "MQTT";
 	let result = null;
 	let inputValue;
+	let st = "1";
 	function submitHandler() {
 		console.log("лог", inputValue);
 	}
 
 	async function doGetRequest() {
-		const res = await fetch("http://192.168.1.67/check", {
+		let res = await fetch("http://192.168.88.16/set?order=btn640_0", {
 			mode: "no-cors",
 			method: "GET",
 		});
+
 		if (res.ok) {
-			alert(res);
+			return res.text();
 		} else {
-			alert("Ошибка HTTP: " + res.status);
+			return res.status();
 		}
 	}
+
+	function handleClick() {
+		alert(doGetRequest());
+	}
+
 </script>
 
 <div class="hamburger-menu">
@@ -37,8 +45,13 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={doGetRequest}
+				<button type="button" on:click={handleClick}
 					>Get request</button
+				>
+				<button
+					type="button"
+					on:click={() => toast.push("Hello world!")}
+					>EMIT TOAST</button
 				>
 				<p>Result:</p>
 				<pre>
@@ -212,13 +225,15 @@
 	}
 
 	.row {
-		margin: 10px 0;
+		margin-top: 2%;
+		margin-bottom: 2%;
+		margin-right: 5%;
+		margin-left: 5%;
 	}
 
 	.left-column {
 		display: inline-block;
-		width: 45%;
-		margin-left: 20px;
+		width: 50%;
 	}
 
 	.right-column {
@@ -231,8 +246,8 @@
 	}
 
 	input {
-		max-width: 100%;
-		width: auto;
+		min-width: 100px;
+		max-width: 600px;
 	}
 
 	label {
