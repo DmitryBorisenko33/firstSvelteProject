@@ -12,7 +12,13 @@
 	}
 
 	async function doGetRequest() {
-		let res = await fetch("http://192.168.88.16/set?order=btn640_0", {
+		if (st == "1") {
+			st = "0";
+		} else if (st == "0") {
+			st = "1";
+		}
+		
+		let res = await fetch("http://192.168.88.16/set?order=btn640_" + st, {
 			mode: "no-cors",
 			method: "GET",
 		});
@@ -27,7 +33,6 @@
 	function handleClick() {
 		alert(doGetRequest());
 	}
-
 </script>
 
 <div class="hamburger-menu">
@@ -45,8 +50,7 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={handleClick}
-					>Get request</button
+				<button type="button" on:click={handleClick}>Get request</button
 				>
 				<button
 					type="button"
