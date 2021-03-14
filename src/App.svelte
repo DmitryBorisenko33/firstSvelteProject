@@ -24,7 +24,7 @@
 		});
 
 		if (res.ok) {
-			let text = await response.text();
+			let text = await res.text();
 			alert("text " + text.slice(0, 80) + "...");
 		} else {
 			alert("status " + res.status);
