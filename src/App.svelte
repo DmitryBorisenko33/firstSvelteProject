@@ -1,46 +1,75 @@
 <script>
+	//роутер для навигации=========================================
 	import { Route, router, active } from "tinro";
 	router.mode.hash(); // enables hash navigation method
 	//router.mode.memory(); // enables in-memory navigation method
+
+	//всплывающие уведомления======================================
 	import { toast } from "@zerodevx/svelte-toast";
+
+	//обработка событий при загрузки===============================
 	import { onMount } from "svelte";
-	let setMain = "Устройство";
-	let setWifi = "WiFi";
-	let setMqtt = "MQTT";
-	let result = null;
-	let inputValue;
-	let st = "1";
 
-	function submitHandler() {
-		console.log("лог", inputValue);
-	}
+	//секция переменных============================================
+	let myip = document.location.hostname;
+	let configSetupJson = "{}";
 
+	const setMain = "Устройство";
+	const setWifi = "WiFi";
+	const setMqtt = "MQTT";
+
+	const wifissid = "Название сети:";
+	const wifipasswd = "Пароль:";
+	const mqttserver = "Имя сервера:";
+	const mqttport = "Номер порта:";
+	const mqttprefix = "Префикс:";
+	const mqttuser = "Имя пользователя:";
+	const mqttpasswd = "Пароль:";
+
+	let routerssid;
+	let routerpass;
+	let mqttServer;
+	let mqttPort;
+	let mqttPrefix;
+	let mqttUser;
+	let mqttPass;
+
+	//функции=======================================================
 	onMount(async () => {
-		//getConfigJson();
+		getСonfigSetupJson();
 	});
 
-	async function getConfigJson() {
-		let res = await fetch("http://192.168.88.16/config.setup.json", {
+	async function getСonfigSetupJson() {
+		let res = await fetch("http://" + myip + "/config.setup.json", {
 			mode: "no-cors",
 			method: "GET",
 		});
-
 		if (res.ok) {
-			let json = await res.json();
-			//alert("received msg: " + json["name"]);
-			result = json["name"];
+			configSetupJson = await res.json();
 		} else {
 			//alert("status " + res.status);
+			console.log("error", res.status);
 		}
+		getValues();
+	}
+
+	function parseСonfigSetupJson(key) {
+		let result = configSetupJson[key];
+		return result;
+	}
+
+	function getValues() {
+		routerssid = parseСonfigSetupJson("routerssid");
+		routerpass = parseСonfigSetupJson("routerpass");
+		mqttServer = parseСonfigSetupJson("mqttServer");
+		mqttPort = parseСonfigSetupJson("mqttPort");
+		mqttPrefix = parseСonfigSetupJson("mqttPrefix");
+		mqttUser = parseСonfigSetupJson("mqttUser");
+		mqttPass = parseСonfigSetupJson("mqttPass");
 	}
 
 	async function doGetRequest() {
-		if (st == "1") {
-			st = "0";
-		} else if (st == "0") {
-			st = "1";
-		}
-		let res = await fetch("http://192.168.88.16/set?test=" + st, {
+		let res = await fetch("http://" + myip + "/set?test=" + st, {
 			mode: "no-cors",
 			method: "GET",
 		});
@@ -60,15 +89,21 @@
 	</label>
 	<ul class="menu__box">
 		<li>
-			<a class="menu__item" href="/" on:click={getConfigJson}>{setMain}</a>
+			<a class="menu__item" href="/" on:click={getСonfigSetupJson}
+				>{setMain}</a
+			>
 		</li>
 
 		<li>
-			<a class="menu__item" href="/wifi" on:click={getConfigJson}>{setWifi}</a>
+			<a class="menu__item" href="/wifi" on:click={getСonfigSetupJson}
+				>{setWifi}</a
+			>
 		</li>
 
 		<li>
-			<a class="menu__item" href="/mqtt" on:click={getConfigJson}>{setMqtt}</a>
+			<a class="menu__item" href="/mqtt" on:click={getСonfigSetupJson}
+				>{setMqtt}</a
+			>
 		</li>
 	</ul>
 
@@ -76,7 +111,7 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={getConfigJson}
+				<button type="button" on:click={getСonfigSetupJson}
 					>Get request</button
 				>
 				<button
@@ -86,7 +121,7 @@
 				>
 				<p>Result:</p>
 				<pre>
-				{result}
+				{parseСonfigSetupJson("name")}
 				</pre>
 			</div>
 		</Route>
@@ -102,27 +137,19 @@
 						<form>
 							<div class="row">
 								<div class="left-column">
-									<label for="fname">Название сети:</label>
+									<label for="ssid">{wifissid}</label>
 								</div>
 								<div class="right-column">
-									<input
-										type="text"
-										id="fname"
-										name="fname"
-									/>
+									<input type="text" value={routerssid} />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="left-column">
-									<label for="lname">Пароль:</label>
+									<label for="passwd">{wifipasswd}</label>
 								</div>
 								<div class="right-column">
-									<input
-										type="password"
-										id="lname"
-										name="lname"
-									/>
+									<input type="password" value={routerpass} />
 								</div>
 							</div>
 
@@ -130,7 +157,7 @@
 								<div class="center-column">
 									<button
 										type="button"
-										on:click={submitHandler}
+										on:click={doGetRequest}
 										>Сохранить
 									</button>
 								</div>
@@ -144,6 +171,69 @@
 		<Route path="/mqtt">
 			<div class="head">
 				<h2>{setMqtt}</h2>
+			</div>
+
+			<div class="content">
+				<div class="box">
+					<slot>
+						<form>
+							<div class="row">
+								<div class="left-column">
+									<label for="ssid">{mqttserver}</label>
+								</div>
+								<div class="right-column">
+									<input type="text" value={mqttServer} />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="left-column">
+									<label for="passwd">{mqttport}</label>
+								</div>
+								<div class="right-column">
+									<input type="text" value={mqttPort} />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="left-column">
+									<label for="passwd">{mqttprefix}</label>
+								</div>
+								<div class="right-column">
+									<input type="text" value={mqttPrefix} />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="left-column">
+									<label for="passwd">{mqttuser}</label>
+								</div>
+								<div class="right-column">
+									<input type="text" value={mqttUser} />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="left-column">
+									<label for="passwd">{mqttpasswd}</label>
+								</div>
+								<div class="right-column">
+									<input type="password" value={mqttPass} />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="center-column">
+									<button
+										type="button"
+										on:click={doGetRequest}
+										>Сохранить
+									</button>
+								</div>
+							</div>
+						</form>
+					</slot>
+				</div>
 			</div>
 		</Route>
 	</ul>
