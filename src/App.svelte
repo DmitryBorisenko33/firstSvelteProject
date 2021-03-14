@@ -3,6 +3,7 @@
 	router.mode.hash(); // enables hash navigation method
 	//router.mode.memory(); // enables in-memory navigation method
 	import { toast } from "@zerodevx/svelte-toast";
+	import { onMount } from "svelte";
 	let setMain = "Устройство";
 	let setWifi = "WiFi";
 	let setMqtt = "MQTT";
@@ -13,6 +14,10 @@
 	function submitHandler() {
 		console.log("лог", inputValue);
 	}
+
+	onMount(async () => {
+		//getConfigJson();
+	});
 
 	async function getConfigJson() {
 		let res = await fetch("http://192.168.88.16/config.setup.json", {
@@ -25,7 +30,7 @@
 			//alert("received msg: " + json["name"]);
 			result = json["name"];
 		} else {
-			alert("status " + res.status);
+			//alert("status " + res.status);
 		}
 	}
 
@@ -48,16 +53,23 @@
 	}
 </script>
 
-
 <div class="hamburger-menu">
 	<input id="menu__toggle" type="checkbox" />
 	<label class="menu__btn" for="menu__toggle">
 		<span />
 	</label>
 	<ul class="menu__box">
-		<li><a class="menu__item" href="/">{setMain}</a></li>
-		<li><a class="menu__item" href="/wifi">{setWifi}</a></li>
-		<li><a class="menu__item" href="/mqtt">{setMqtt}</a></li>
+		<li>
+			<a class="menu__item" href="/" on:click={getConfigJson}>{setMain}</a>
+		</li>
+
+		<li>
+			<a class="menu__item" href="/wifi" on:click={getConfigJson}>{setWifi}</a>
+		</li>
+
+		<li>
+			<a class="menu__item" href="/mqtt" on:click={getConfigJson}>{setMqtt}</a>
+		</li>
 	</ul>
 
 	<ul class="menu__main">
