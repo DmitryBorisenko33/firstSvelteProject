@@ -24,15 +24,13 @@
 		});
 
 		if (res.ok) {
-			return res.text();
+			let text = await response.text();
+			alert("text " + text.slice(0, 80) + '...');
 		} else {
-			return res.status;
+			alert("status " + res.status);
 		}
 	}
 
-	function handleClick() {
-		alert(doGetRequest());
-	}
 </script>
 
 <div class="hamburger-menu">
@@ -50,7 +48,7 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={handleClick}>Get request</button
+				<button type="button" on:click={doGetRequest}>Get request</button
 				>
 				<button
 					type="button"
