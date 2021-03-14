@@ -25,12 +25,11 @@
 
 		if (res.ok) {
 			let text = await response.text();
-			alert("text " + text.slice(0, 80) + '...');
+			alert("text " + text.slice(0, 80) + "...");
 		} else {
 			alert("status " + res.status);
 		}
 	}
-
 </script>
 
 <div class="hamburger-menu">
@@ -48,7 +47,8 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={doGetRequest}>Get request</button
+				<button type="button" on:click={doGetRequest}
+					>Get request</button
 				>
 				<button
 					type="button"
