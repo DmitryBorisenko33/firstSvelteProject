@@ -5,7 +5,14 @@
 	//router.mode.memory(); // enables in-memory navigation method
 
 	//всплывающие уведомления======================================
-	import { toast } from "@zerodevx/svelte-toast";
+	import { SvelteToast, toast } from "@zerodevx/svelte-toast";
+
+	const app = new SvelteToast({
+		target: document.body,
+		props: {
+			options: {},
+		},
+	});
 
 	//обработка событий при загрузки===============================
 	import { onMount } from "svelte";
@@ -68,6 +75,34 @@
 		mqttPass = parseСonfigSetupJson("mqttPass");
 	}
 
+	function pushGreen() {
+		toast.push("Saved!", {
+			theme: {
+				"--toastBackground": "#48BB78",
+				"--toastProgressBackground": "#2F855A",
+			},
+		});
+	}
+
+	function pushRed() {
+		toast.push("Error!", {
+			theme: {
+				"--toastBackground": "#F56565",
+				"--toastProgressBackground": "#C53030",
+			},
+		});
+	}
+
+	function upgrade() {
+		toast.push("Upgrade in progress...", {
+			duration: 20000,
+			theme: {
+				"--toastBackground": "#F56565",
+				"--toastProgressBackground": "#C53030",
+			},
+		});
+	}
+
 	async function doGetRequest() {
 		let res = await fetch("http://" + myip + "/set?test=" + st, {
 			mode: "no-cors",
@@ -114,10 +149,8 @@
 				<button type="button" on:click={getСonfigSetupJson}
 					>Get request</button
 				>
-				<button
-					type="button"
-					on:click={() => toast.push("Hello world!")}
-					>EMIT TOAST</button
+				<button type="button" on:click={upgrade}
+					>Всплывающее окно</button
 				>
 				<p>Result:</p>
 				<pre>
