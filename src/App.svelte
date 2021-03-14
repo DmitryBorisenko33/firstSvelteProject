@@ -7,8 +7,19 @@
 	let result = null;
 	let inputValue;
 	let st = "1";
+
 	function submitHandler() {
 		console.log("лог", inputValue);
+	}
+
+	async function getConfigJson() {
+		let res = await fetch("http://192.168.88.16/config.setup.json", {
+			mode: "no-cors",
+			method: "GET",
+		});
+
+		let json = await res.json();
+		alert("received msg: " + json);
 	}
 
 	async function doGetRequest() {
@@ -17,15 +28,13 @@
 		} else if (st == "0") {
 			st = "1";
 		}
-
-		let res = await fetch("http://192.168.88.16/set?order=btn640_" + st, {
+		let res = await fetch("http://192.168.88.16/set?test=" + st, {
 			mode: "no-cors",
 			method: "GET",
 		});
-
 		if (res.ok) {
 			let text = await res.text();
-			alert("text " + text.slice(0, 80) + "...");
+			alert("received msg: " + text);
 		} else {
 			alert("status " + res.status);
 		}
@@ -47,7 +56,7 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={doGetRequest}
+				<button type="button" on:click={getConfigJson()}
 					>Get request</button
 				>
 				<button
