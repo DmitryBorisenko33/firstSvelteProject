@@ -1,5 +1,7 @@
 <script>
 	import { Route, router, active } from "tinro";
+	router.mode.hash(); // enables hash navigation method
+	//router.mode.memory(); // enables in-memory navigation method
 	import { toast } from "@zerodevx/svelte-toast";
 	let setMain = "Устройство";
 	let setWifi = "WiFi";
@@ -18,8 +20,13 @@
 			method: "GET",
 		});
 
-		let json = await res.json();
-		alert("received msg: " + json);
+		if (res.ok) {
+			let json = await res.json();
+			//alert("received msg: " + json["name"]);
+			result = json["name"];
+		} else {
+			alert("status " + res.status);
+		}
 	}
 
 	async function doGetRequest() {
@@ -41,6 +48,7 @@
 	}
 </script>
 
+
 <div class="hamburger-menu">
 	<input id="menu__toggle" type="checkbox" />
 	<label class="menu__btn" for="menu__toggle">
@@ -56,7 +64,7 @@
 		<Route path="/">
 			<div class="head">
 				<h2>{setMain}</h2>
-				<button type="button" on:click={getConfigJson()}
+				<button type="button" on:click={getConfigJson}
 					>Get request</button
 				>
 				<button
