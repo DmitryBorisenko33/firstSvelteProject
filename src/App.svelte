@@ -97,8 +97,8 @@
 		toast.push("Upgrade in progress...", {
 			duration: 20000,
 			theme: {
-				"--toastBackground": "#F56565",
-				"--toastProgressBackground": "#C53030",
+				"--toastBackground": "#48BB78",
+				"--toastProgressBackground": "#2F855A",
 			},
 		});
 	}
@@ -392,6 +392,7 @@
 
 	.right-column {
 		display: inline-block;
+		width: auto;
 	}
 
 	.center-column {
