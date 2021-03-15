@@ -293,7 +293,7 @@
 		left: 0;
 	}
 	#menu__toggle:checked ~ .menu__main {
-		margin-left: 150px;
+		margin-left: 150px; /* размер выхода бокового меню */
 	}
 
 	.menu__btn {
@@ -381,8 +381,8 @@
 	.row {
 		margin-top: 2%;
 		margin-bottom: 2%;
-		margin-right: 5%;
-		margin-left: 5%;
+		margin-right: 2%;
+		margin-left: 2%;
 	}
 
 	.left-column {
@@ -401,8 +401,7 @@
 	}
 
 	input {
-		min-width: 100px;
-		max-width: 600px;
+		width: 100%;
 	}
 
 	label {
